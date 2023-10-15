@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  article {
+    text-align: justify;
+  }
+  img {
+    display: inline-block;
+    width: 100%;
+  }
+}
+
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto space-y-6;
+  }
+}
+
+@layer utilities {
+  .effect-hover-block {
+    opacity: 0.65;
+    transition: all 0.25s ease-in;
+  }
+
+  .effect-hover-text {
+    color: red;
+    transition: all 0.25s ease-in;   
+  }
+
+  .redirect-link {
+    display: inline-block;
+    color: rgb(57, 57, 230);
+  }
+
+  .title {
+    display: block;
+    font-size: 2rem;
+    line-height: 1.5;
+    color: black;
+    font-weight: bold;
+  }
+
+}
