@@ -18,6 +18,14 @@
                     <x-nav-link :href="route('post.index')" :active="request()->routeIs('new-post')">
                         {{ __('Your posts') }}
                     </x-nav-link>
+                    @if (Auth::user()->role == 'admin')
+                        <x-nav-link :href="route('admin.index')" :active="request()->routeIs('admin/dashboard')">
+                            {{ __('Manage user posts') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('category.index')" :active="request()->routeIs('/admin/category')">
+                            {{ __('Manage categories') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 

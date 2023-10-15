@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('queue_posts', function (Blueprint $table) {
+        Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->string('username');
             $table->unsignedBigInteger('post_id');
-            $table->string('accpected');
+            $table->text('content');
             $table->timestamps();
+            $table->softDeletes();
 
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
-            $table->foreign('post_id')->references('id')->on('posts')->cascadeOnDelete();
+            $table->foreign('username')->references('name')->on('users');
+            $table->foreign('post_id')->references('id')->on('posts');
         });
     }
 
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('queue_posts');
+        Schema::dropIfExists('comments');
     }
 };

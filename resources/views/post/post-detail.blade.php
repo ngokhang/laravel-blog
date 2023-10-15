@@ -2,10 +2,49 @@
     <div class="py-12 space-y-6">
         <div class="max-w-7xl mx-auto bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 space-y-6">
             <h1 class="title text-gray-900">{{ $post->title }}</h1>
+            @auth
+                @if (auth()->user()->role == 'admin')
+                    <div class="flex gap-5">
+                        <form action="{{ route('admin.update', ['slug' => $post->slug]) }}" method="POST">
+                            @method('PUT')
+                            @csrf
+                            <x-primary-button
+                                class="bg-green-500 hover:effect-hover-block">{{ __('Accept this post') }}</x-primary-button>
+                        </form>
+                        <form action="{{ route('admin.destroy', ['slug' => $post->slug]) }}" method="POST">
+                            @method('DELETE')
+                            @csrf
+                            <x-primary-button
+                                class="bg-red-600 hover:effect-hover-block">{{ __('Remove this post') }}</x-primary-button>
+                        </form>
+                        <form action="{{ route('admin.update', ['slug' => $post->slug]) }}" method="POST">
+                            @method('PUT')
+                            @csrf
+                            <x-primary-button
+                                class="bg-yellow-400 hover:effect-hover-block">{{ __('Restore this post') }}</x-primary-button>
+                        </form>
+                        <form action="{{ route('admin.force-delete', ['slug' => $post->slug]) }}" method="POST">
+                            @method('DELETE')
+                            @csrf
+                            <x-primary-button
+                                class="bg-red-600 hover:effect-hover-block">{{ __('Delete permanently this post') }}</x-primary-button>
+                        </form>
+                    </div>
+                @endif
+            @endauth
             <div class="flex gap-5">
                 <span>Author: </span>
                 <a href="#" class="redirect-link hover:effect-hover-text">{{ $post->user->name }}</a> -
                 <span>Posted at: {{ $post->created_at }}</span>
+                @if ($post->user->id == Auth::user()->id || Auth::user()->role == 'admin')
+                    <a href="{{ route('post.edit', ['post_id' => $post->id]) }}"
+                        class="redirect-link hover:effect-hover-text">Edit this post</a>
+                @endif
+                @if ($post->accepted == 0)
+                    <span class="text-red-400">Waiting admin</span>
+                @else
+                    <span class="text-green-400">Admin verified</span>
+                @endif
             </div>
             <div class="inline-block mt-3 ">
                 @foreach ($post->categories as $category)
@@ -16,16 +55,54 @@
                 @endforeach
             </div>
             <article class="mt-5 text-lg">
-                @if ($post->img != null)
-                    <div class="article-img my-5 flex justify-center">
-                        <img class="w-1/2 rounded-md shadow-xl"
-                            src="https://vcdn1-giaitri.vnecdn.net/2023/04/28/doraemon4-1682675790-8961-1682675801.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=EAxUAFcakJsi4GQW0mYsCQ"
-                            alt="This is image">
-                        <span class="text-xs leading-normal text-gray-500">{{ $post->img->title }}</span>
-                    </div>
-                @endif
+                <div class="article-img my-5 flex flex-col items-center justify-center">
+                    <img class="w-1/2 rounded-md shadow-xl" src="{{ asset($article_img) }}" alt="This is image">
+                    <span class="block italic">Image</span>
+                </div>
                 {{ $post->content }}
             </article>
+        </div>
+    </div>
+
+    <div class="py-12 space-y-6">
+        <div class="max-w-7xl mx-auto bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 space-y-6">
+            <h1 class="title text-gray-900">{{ __('Comments') }}</h1>
+            <div class="space-y-6">
+                @foreach ($comments as $comment)
+                    <div>
+                        <a href="#" class="text-xl text-black">{{ $comment->username }}</a>
+                        @if ($comment->username == $post->user->name)
+                            - <span class="text-xl text-red-500">Author this article</span>
+                        @endif
+                        <span class="ps-4"> - {{ $comment->created_at }}</span>
+                    </div>
+                    <div>
+                        <p class="text-base">
+                            "{{ $comment->content }}"
+                        </p>
+                    </div>
+                    <hr>
+                @endforeach
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 space-y-6">
+            <h1 class="title text-gray-900">{{ __('Your comment') }}</h1>
+            <div class="space-y-6">
+                <x-alert-errors />
+                <form action="{{ route('comment.store', ['post_id' => $post->id]) }}" method="POST" class="space-y-6">
+                    @csrf
+                    <div>
+                        <x-input-label for="comment" :value="__('Content')" />
+                        <textarea name="comment" id="comment" cols="30" rows="5"
+                            class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"></textarea>
+                        <x-input-error :messages="$errors->updatePassword->get('title')" class="mt-2" />
+                    </div>
+                    <div>
+                        <x-primary-button>{{ __('Comment') }}</x-primary-button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </x-app-layout>

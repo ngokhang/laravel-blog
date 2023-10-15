@@ -17,8 +17,8 @@ class CategoryPostFactory extends Factory
     public function definition(): array
     {
         return [
-            'post_id' => rand(1, 20),
-            'category_id' => rand(1, 3)
+            // 'post_id' => rand(1, 20),
+            // 'category_id' => rand(0, 3)
         ];
     }
 }

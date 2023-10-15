@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('category_post', function (Blueprint $table) {
             $table->id();
-            $table->integer('category_id');
+            $table->integer('category_id')->nullable();
             $table->integer('post_id');
             $table->timestamps();
         });

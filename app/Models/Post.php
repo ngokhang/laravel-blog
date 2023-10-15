@@ -11,7 +11,7 @@ class Post extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['title', 'description', 'content', 'article_img', 'category_id'];
+    protected $fillable = ['title', 'description', 'content', 'article_img', 'accepted', 'slug'];
 
     public function categories()
     {
@@ -21,5 +21,20 @@ class Post extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function images()
+    {
+        return $this->hasOne(Image::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 }

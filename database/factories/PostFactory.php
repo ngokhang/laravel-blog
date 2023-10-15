@@ -18,7 +18,7 @@ class PostFactory extends Factory
     {
         return [
             'user_id' => rand(1, 10),
-            'category_id' => 1,
+            // 'category_id' => 1,
             'title' => 'Tiêu đề bài viết',
             'description' => 'Miêu tả bài viết',
             'content' => fake()->paragraph(),
