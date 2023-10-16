@@ -22,8 +22,8 @@ class CategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'new_name_category' => 'required|string',
-            'new_slug_category' => 'required|string'
+            'new_name_category' => 'required|string|unique:categories,name',
+            'new_slug_category' => 'required|string|unique:categories,slug'
         ];
     }
 }
