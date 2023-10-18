@@ -11,7 +11,7 @@ class Comment extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['post_id', 'content', 'username'];
+    protected $fillable = ['post_id', 'content', 'username', 'user_id', 'reply_to'];
 
     public function user()
     {
@@ -21,5 +21,15 @@ class Comment extends Model
     public function post()
     {
         return $this->belongsTo(Post::class);
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Comment::class, 'reply_to');
+    }
+
+    public function replies()
+    {
+        return $this->hasMany(Comment::class, 'reply_to', 'id');
     }
 }

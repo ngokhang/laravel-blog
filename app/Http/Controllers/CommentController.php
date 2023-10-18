@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CommentRequest;
 use App\Models\Comment;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,18 +24,19 @@ class CommentController extends Controller
     public function create()
     {
         //
+
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CommentRequest $request, string $id)
+    public function store(CommentRequest $request, Post $post)
     {
         $contentComment = $request->comment;
         $res = Comment::create([
-            'username' => Auth::user()->name,
-            'post_id' => $id,
-            'content' => $contentComment
+            'user_id' => Auth::user()->id,
+            'post_id' => $post->id,
+            'content' => $contentComment,
         ]);
         if ($res) {
             return redirect()->back()->with('success', 'Comment successfully');
@@ -47,7 +49,11 @@ class CommentController extends Controller
      */
     public function show(Comment $comment)
     {
-        //
+        $comment->load(['post.user', 'post.categories', 'post.categories', 'post.comments' => function ($query) {
+            $query->where('reply_to', null);
+        }]);
+
+        return view('post.post-detail', ['post' => $comment->post]);
     }
 
     /**
@@ -56,6 +62,7 @@ class CommentController extends Controller
     public function edit(Comment $comment)
     {
         //
+
     }
 
     /**
@@ -64,6 +71,7 @@ class CommentController extends Controller
     public function update(Request $request, Comment $comment)
     {
         //
+        return $comment;
     }
 
     /**

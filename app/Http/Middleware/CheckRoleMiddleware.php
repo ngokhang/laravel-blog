@@ -14,11 +14,12 @@ class CheckRoleMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, string $role): Response
+    public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        if (Auth::user()->role == $role) {
+        $user = Auth::user();
+        if ($user && in_array($user->role, $roles)) {
             return $next($request);
         }
-        return redirect()->back()->with('error', 'You not permission');
+        return redirect()->route('dashboard')->with('warning', 'Not permission');
     }
 }

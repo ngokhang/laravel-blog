@@ -12,8 +12,10 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $postList = Post::with(['categories'])->get();
+        $postList = Post::withTrashed()->get();
+        $postList->load(['categories']);
         return view('post.posts-list', ['postList' => $postList]);
+        // return $postList;
     }
 
     /**
@@ -51,13 +53,10 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $slug)
+    public function update(Request $request, Post $post)
     {
-        $result = Post::where('slug', $slug)->update(['accepted' => 1, 'deleted_at' => null]);
-        if ($result) {
-            return redirect()->route('admin.index')->with('success', "$slug has accepted");
-        }
-        return redirect()->route('admin.index')->with('error', "Accepting $slug was failed");
+        $post->update(['accepted' => 1]);
+        return $post->restore() ? redirect()->route('admin.index')->with('success', "$post->title has restore") : redirect()->route('admin.index')->with('error', "Failed");
     }
 
     /**
@@ -68,15 +67,6 @@ class AdminController extends Controller
         $result = Post::where('slug', $slug)->delete();
         if ($result) {
             return redirect()->route('admin.index')->with('success', "$slug has been temporarily deleted");
-        }
-        return redirect()->route('admin.index')->with('error', "Failed");
-    }
-
-    public function forceDel(string $slug)
-    {
-        $result = Post::where('slug', $slug)->forceDelete();
-        if ($result) {
-            return redirect()->route('admin.index')->with('success', "$slug has deleted permanently");
         }
         return redirect()->route('admin.index')->with('error', "Failed");
     }

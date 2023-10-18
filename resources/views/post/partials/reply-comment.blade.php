@@ -77,11 +77,10 @@
                             - <span class="text-xl text-red-500">Author</span>
                         @endif
                         <div class="ps-4">{{ $comment->created_at }}</div>
-                        <a href="#" class="text-blue-300 hover:effect-hover-text btn-reply-cmt"
-                            data-target="comment-id-{{ $comment->id }}">Reply
+                        <a href="#" class="text-blue-300 hover:effect-hover-text">Reply
                             this comment</a>
                     </div>
-                    <div class="space-y-6">
+                    <div>
                         <div class="space-y-6">
                             <div>
                                 <p class="text-base">{{ $comment->content }}</p>
@@ -103,23 +102,6 @@
                             @endif
                             <hr>
                         </div>
-                        <div class="space-y-6 relpy-comment hidden animate-fadeIn"
-                            data-target="comment-id-{{ $comment->id }}">
-                            <x-alert-errors />
-                            <form action="{{ route('reply.store', ['comment' => $comment]) }}" method="POST"
-                                class="space-y-6 w-full" id="form-reply-comment">
-                                @csrf
-                                <div>
-                                    <x-input-label for="comment" :value="__('Comment')" />
-                                    <textarea name="comment" id="comment" cols="30" rows="3"
-                                        class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"></textarea>
-                                    <x-input-error :messages="$errors->updatePassword->get('title')" class="mt-2" />
-                                </div>
-                                <div>
-                                    <x-primary-button>{{ __('Reply') }}</x-primary-button>
-                                </div>
-                            </form>
-                        </div>
                     </div>
                 @endforeach
             </div>
@@ -129,7 +111,7 @@
             <h1 class="title text-gray-900">{{ __('Your comment') }}</h1>
             <div class="space-y-6">
                 <x-alert-errors />
-                <form action="{{ route('comment.store', ['post' => $post]) }}" method="POST" class="space-y-6">
+                <form action="{{ route('comment.update', ['comment' => $post]) }}" method="POST" class="space-y-6">
                     @csrf
                     <div>
                         <x-input-label for="comment" :value="__('Comment')" />

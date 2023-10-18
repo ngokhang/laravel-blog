@@ -13,9 +13,13 @@ return new class extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->id();
-            $table->string('slug')->unique();
+            $table->unsignedBigInteger('post_id');
+            $table->string('name')->unique();
             $table->string('path');
             $table->timestamps();
+
+            $table->foreign('name')->references('slug')->on('posts');
+            $table->foreign('post_id')->references('id')->on('posts');
         });
     }
 

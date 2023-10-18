@@ -3,7 +3,7 @@
         <x-alert-errors />
 
         <div class="container">
-            <form action="{{ route('post.update', ['slug' => $post->slug]) }}"
+            <form action="{{ route('post.update', ['post' => $post->slug]) }}"
                 class="bg-white shadow sm:rounded-lg p-4 space-y-6" method="POST" enctype="multipart/form-data">
                 @method('PUT')
                 @csrf
@@ -52,7 +52,7 @@
                     </select>
                 </div>
                 <div>
-                    <x-primary-button>{{ __('Create') }}</x-primary-button>
+                    <x-primary-button>{{ __('Edit') }}</x-primary-button>
                 </div>
             </form>
         </div>

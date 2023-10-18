@@ -40,7 +40,7 @@
                     <x-input-label for="category_id" :value="__('Category')" />
                     <select id="category_id" name="category_id"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                        <option disabled selected>Choose category</option>
+                        <option disabled>Choose category</option>
                         @foreach ($categories as $category)
                             @if ($category->id == 1)
                                 <option value="{{ $category->id }}" selected>{{ $category->name }}</option>
