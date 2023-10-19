@@ -137,7 +137,7 @@
         <div class="max-w-7xl mx-auto bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 space-y-6">
             @if ($post->accepted == 0)
                 <h1 class="title text-gray-900">{{ __('Your comment') }}</h1>
-                <div class="text-base">This post isn't accepted by admin, do not comment</div>
+                <div class="text-base">This post hasn't accepted by admin yet.</div>
             @else
                 <h1 class="title text-gray-900">{{ __('Your comment') }}</h1>
                 <div class="space-y-6">
