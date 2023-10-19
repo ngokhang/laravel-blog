@@ -49,11 +49,6 @@ class CommentController extends Controller
      */
     public function show(Comment $comment)
     {
-        $comment->load(['post.user', 'post.categories', 'post.categories', 'post.comments' => function ($query) {
-            $query->where('reply_to', null);
-        }]);
-
-        return view('post.post-detail', ['post' => $comment->post]);
     }
 
     /**
