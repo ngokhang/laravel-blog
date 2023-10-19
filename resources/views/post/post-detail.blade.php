@@ -69,79 +69,93 @@
     <div class="py-12 space-y-6">
         <div class="max-w-7xl mx-auto bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 space-y-6">
             <h1 class="title text-gray-900">{{ __('Comments') }}</h1>
-            <div class="space-y-6">
-                @foreach ($post->comments as $comment)
-                    <div class="flex items-center gap-5">
-                        <a href="#" class="text-xl text-black">{{ $comment->user->name }}</a>
-                        @if ($post->user_id == $comment->user->id)
-                            - <span class="text-xl text-red-500">Author</span>
-                        @endif
-                        <div class="ps-4">{{ $comment->created_at }}</div>
-                        <a href="#" class="text-blue-300 hover:effect-hover-text btn-reply-cmt"
-                            data-target="comment-id-{{ $comment->id }}">Reply
-                            this comment</a>
-                    </div>
-                    <div class="space-y-6">
-                        <div class="space-y-6">
-                            <div>
-                                <p class="text-base">{{ $comment->content }}</p>
-                            </div>
-                            @if (count($comment->replies) > 0)
-                                @foreach ($comment->replies as $commentChild)
-                                    <div class="replies-comment ps-5">
-                                        <a href="#"
-                                            class="text-xl text-black">{{ $commentChild->user->name }}</a>
-                                        @if ($post->user_id == $commentChild->user->id)
-                                            - <span class="text-lg text-red-500">Author</span>
-                                        @endif
-                                        <span class="ps-4"> {{ $commentChild->created_at }}</span>
-                                        <div class="text-base">
-                                            <p>{{ $commentChild->content }}</p>
-                                        </div>
-                                    </div>
-                                @endforeach
+            @if (count($post->comments) > 0)
+                <div class="space-y-6">
+                    @foreach ($post->comments as $comment)
+                        <div class="flex items-center gap-5">
+                            <a href="#" class="text-xl text-black">{{ $comment->user->name }}</a>
+                            @if ($post->user_id == $comment->user->id)
+                                - <span class="text-xl text-red-500">Author</span>
                             @endif
-                            <hr>
+                            <div class="ps-4">{{ $comment->created_at }}</div>
+                            @if ($post->accepted == 1)
+                                <a href="#" class="text-blue-300 hover:effect-hover-text btn-reply-cmt"
+                                    data-target="comment-id-{{ $comment->id }}">Reply
+                                    this comment</a>
+                            @endif
                         </div>
-                        <div class="space-y-6 relpy-comment hidden animate-fadeIn"
-                            data-target="comment-id-{{ $comment->id }}">
-                            <x-alert-errors />
-                            <form action="{{ route('reply.store', ['comment' => $comment]) }}" method="POST"
-                                class="space-y-6 w-full" id="form-reply-comment">
-                                @csrf
+                        <div class="space-y-6 border rounded-lg p-3">
+                            <div class="space-y-6">
                                 <div>
-                                    <x-input-label for="comment" :value="__('Comment')" />
-                                    <textarea name="comment" id="comment" cols="30" rows="3"
-                                        class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"></textarea>
-                                    <x-input-error :messages="$errors->updatePassword->get('title')" class="mt-2" />
+                                    <p class="text-base">{{ $comment->content }}</p>
                                 </div>
-                                <div>
-                                    <x-primary-button>{{ __('Reply') }}</x-primary-button>
+                                <div class="replies-comment space-y-3 max-h-[150px] overflow-y-auto border rounded-lg">
+                                    @if (count($comment->replies) > 0)
+                                        @foreach ($comment->replies as $commentChild)
+                                            <div class="comment ps-5">
+                                                <a href="#"
+                                                    class="text-xl text-black">{{ $commentChild->user->name }}</a>
+                                                @if ($post->user_id == $commentChild->user->id)
+                                                    - <span class="text-lg text-red-500">Author</span>
+                                                @endif
+                                                <span class="ps-4"> {{ $commentChild->created_at }}</span>
+                                                <div class="text-base">
+                                                    <p>{{ $commentChild->content }}</p>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                    <hr>
                                 </div>
-                            </form>
+                            </div>
+                            <div class="space-y-6 relpy-comment hidden animate-fadeIn"
+                                data-target="comment-id-{{ $comment->id }}">
+                                <x-alert-errors />
+                                <form action="{{ route('reply.store', ['comment' => $comment]) }}" method="POST"
+                                    class="space-y-6 w-full" id="form-reply-comment">
+                                    @csrf
+                                    <div>
+                                        <x-input-label for="comment" :value="__('Comment')" />
+                                        <textarea name="comment" id="comment" cols="30" rows="3"
+                                            class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"></textarea>
+                                        <x-input-error :messages="$errors->updatePassword->get('title')" class="mt-2" />
+                                    </div>
+                                    <div>
+                                        <x-primary-button>{{ __('Reply') }}</x-primary-button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                    </div>
-                @endforeach
-            </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="text-center"><span class="text-base text-gray-900 font-bold italic">Not comment yet.</span>
+                </div>
+            @endif
         </div>
 
         <div class="max-w-7xl mx-auto bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 space-y-6">
-            <h1 class="title text-gray-900">{{ __('Your comment') }}</h1>
-            <div class="space-y-6">
-                <x-alert-errors />
-                <form action="{{ route('comment.store', ['post' => $post]) }}" method="POST" class="space-y-6">
-                    @csrf
-                    <div>
-                        <x-input-label for="comment" :value="__('Comment')" />
-                        <textarea name="comment" id="comment" cols="30" rows="5"
-                            class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"></textarea>
-                        <x-input-error :messages="$errors->updatePassword->get('title')" class="mt-2" />
-                    </div>
-                    <div>
-                        <x-primary-button>{{ __('Comment') }}</x-primary-button>
-                    </div>
-                </form>
-            </div>
+            @if ($post->accepted == 0)
+                <h1 class="title text-gray-900">{{ __('Your comment') }}</h1>
+                <div class="text-base">This post isn't accepted by admin, do not comment</div>
+            @else
+                <h1 class="title text-gray-900">{{ __('Your comment') }}</h1>
+                <div class="space-y-6">
+                    <x-alert-errors />
+                    <form action="{{ route('comment.store', ['post' => $post]) }}" method="POST" class="space-y-6">
+                        @csrf
+                        <div>
+                            <x-input-label for="comment" :value="__('Comment')" />
+                            <textarea name="comment" id="comment" cols="30" rows="5"
+                                class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"></textarea>
+                            <x-input-error :messages="$errors->updatePassword->get('title')" class="mt-2" />
+                        </div>
+                        <div>
+                            <x-primary-button>{{ __('Comment') }}</x-primary-button>
+                        </div>
+                    </form>
+                </div>
+            @endif
         </div>
     </div>
 </x-app-layout>

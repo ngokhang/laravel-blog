@@ -15,14 +15,14 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('post.index')" :active="request()->routeIs('new-post')">
+                    <x-nav-link :href="route('post.index')" :active="request()->routeIs('post.index')">
                         {{ __('Your posts') }}
                     </x-nav-link>
                     @if (Auth::user()->role == 'admin')
-                        <x-nav-link :href="route('admin.index')" :active="request()->routeIs('admin/dashboard')">
+                        <x-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.index')">
                             {{ __('Manage user posts') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('category.index')" :active="request()->routeIs('/admin/category')">
+                        <x-nav-link :href="route('category.index')" :active="request()->routeIs('category.index')">
                             {{ __('Manage categories') }}
                         </x-nav-link>
                     @endif
