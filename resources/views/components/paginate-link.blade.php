@@ -1,0 +1,1 @@
+{{ $postList->links('pagination::tailwind') }}

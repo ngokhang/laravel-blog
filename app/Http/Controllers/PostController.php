@@ -19,9 +19,10 @@ class PostController extends Controller
      */
     public function index()
     {
-        $user = Auth::user()->id;
-        $postList = Post::with(['categories', 'user.comments', 'comments.replies'])->where('user_id', $user)->get();
+        $userId = Auth::user()->id;
+        $postList = Post::yourPost();
         return view('post.posts-list', ['postList' => $postList]);
+        // return $postList;
     }
 
     /**

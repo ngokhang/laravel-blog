@@ -12,8 +12,7 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $postList = Post::withTrashed()->get();
-        $postList->load(['categories']);
+        $postList = Post::adminManagePost();
         return view('post.posts-list', ['postList' => $postList]);
         // return $postList;
     }

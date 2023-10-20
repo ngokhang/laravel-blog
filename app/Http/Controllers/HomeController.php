@@ -9,7 +9,8 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $postList = Post::with(['categories'])->where('accepted', 1)->get();
+        $postList = Post::withPostAccepted();
         return view('post.posts-list', ['postList' => $postList]);
+        // return $postList;
     }
 }

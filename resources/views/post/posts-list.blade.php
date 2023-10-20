@@ -23,4 +23,8 @@
             </div>
         @endforeach
     </div>
+
+    <div class="flex pb-5 justify-center">
+        <x-paginate-link :postList="$postList" />
+    </div>
 </x-app-layout>

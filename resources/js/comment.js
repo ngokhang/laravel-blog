@@ -1,9 +1,6 @@
 const btnReplyComment = document.querySelectorAll(".btn-reply-cmt");
 const formReplyComment = document.getElementById("form-relpy-comment");
 
-const repliesCommentDiv = document.querySelectorAll(".replies-comment");
-console.log(repliesCommentDiv[0].children.length);
-
 function toggleDisplay(element) {
     if (element.classList.contains("hidden")) {
         element.classList.add("animate-fadeIn");
